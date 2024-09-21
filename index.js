@@ -1,11 +1,18 @@
-const express = require('express')
-const dotenv= require('dotenv');
-const { serverListeningMessage } = require('./constants');
+import express from 'express';
+import dotenv from 'dotenv';
+import { serverListeningMessage } from './constants.js';
+import { connectToDB } from './db/connectToDB.js';
 
 dotenv.config();
 
-const app  = express()
+const app = express()
 
-app.listen(process.env.PORT , () => {
-    console.log(`${serverListeningMessage} ${process.env.PORT}`);
-})
+connectToDB()
+    .then(() => {
+        app.listen(process.env.PORT, () => {
+            console.log(`${serverListeningMessage} ${process.env.PORT}`);
+        })
+    })
+    .catch((err) => {
+        console.log(customErrorMessage.mongoDBFail, err);
+    })
