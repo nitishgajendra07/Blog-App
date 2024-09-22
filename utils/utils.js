@@ -6,3 +6,10 @@ export const slugify = (text) => {
         .replace(/[\s\W-]+/g, '-')
         .replace(/^-+|-+$/g, '');
 };
+
+export class CustomError extends Error {
+    constructor(statusCode, message) {
+        super(message);
+        this.statusCode = statusCode;
+    }
+}

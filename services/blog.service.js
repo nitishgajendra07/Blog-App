@@ -1,5 +1,6 @@
+import { responseMessage } from "../constants.js";
 import Blog from "../models/blog.model.js";
-import { slugify } from "../utils/utils.js";
+import { CustomError, slugify } from "../utils/utils.js";
 
 export async function addBlogToDatabase(body) {
   try {
@@ -22,7 +23,7 @@ export async function getBlogById(blogId) {
   try {
     const blog = await Blog.findOne({ _id: blogId });
     if (!blog) {
-      throw new Error(responseMessage.invalidBlogId);
+      throw new CustomError(400, responseMessage.invalidBlogId);
     }
     return blog;
   } catch (err) {
@@ -32,19 +33,18 @@ export async function getBlogById(blogId) {
 
 export async function updateBlogInDatabase(blogId, body) {
   try {
-    const { title, content, category, user } = body;
+    const { title, content, category, user, userIdFromAuth } = body;
     const blog = await Blog.findById(blogId);
     if (!blog) {
-      throw new Error({ statusCode: 400, message: 'Blog not found' });
+      throw new CustomError(400, responseMessage.blogNotFound);
     }
-    if (blog.userId.toString() !== user.userId && !user.isAdmin) {
-      throw new Error('Unauthorized: You do not have permission to update this blog');
+    if (blog.userId.toString() !== userIdFromAuth && !user.isAdmin) {
+      throw new CustomError(400, responseMessage.unauthorizedBlogUpdate);
     }
     let slug;
     if (title) {
       slug = slugify(title)
     }
-
     const updatedBlog = await Blog.findByIdAndUpdate(
       blogId,
       {
@@ -68,8 +68,8 @@ export async function updateBlogInDatabase(blogId, body) {
 export async function deleteBlogFromDatabase(blogId, body) {
   try {
     const blog = await Blog.findById(blogId);
-    if (blog.userId.toString() !== body.user.userId && !body.user.isAdmin) {
-      throw new Error({ statusCode: 400, message: "You are not allowed to delete this blog" })
+    if (blog.userId.toString() !== body.userIdFromAuth && !body.user.isAdmin) {
+      throw new CustomError(400, responseMessage.unauthorizedBlogDelete);
     }
     const deletedBlog = await Blog.findByIdAndDelete(blogId);
 
@@ -86,7 +86,7 @@ export async function getBlogByTitle(blogTitle) {
   try {
     const blog = await Blog.findOne({ title: blogTitle });
     if (!blog) {
-      throw new Error(responseMessage.invalidBlogId);
+      throw new CustomError(400, responseMessage.invalidBlogId);
     }
     return blog;
   } catch (err) {

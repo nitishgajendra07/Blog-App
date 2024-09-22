@@ -1,5 +1,6 @@
 import { responseMessage } from "../constants.js";
 import { Review } from "../models/review.model.js";
+import { CustomError } from "../utils/utils.js";
 
 export async function addReviewToDB(reviewObj) {
     try {
@@ -16,10 +17,10 @@ export async function deleteReviewFromDB(reviewId, body) {
     try {
         const review = await Review.findById(reviewId)
         if (!review) {
-            throw new Error({ statusCode: 400, message: responseMessage.invalidReviewId });
+            throw new CustomError(400, responseMessage.invalidReviewId);
         }
-        if (review.userId.toString() !== body.user._id && !body.user.isAdmin) {
-            throw new Error({ statusCode: 400, message: "You are not allowed to delete this review" });
+        if (review.userId.toString() !== body.userIdFromAuth && !body.user.isAdmin) {
+            throw new CustomError(400, responseMessage.unauthorizedReviewDelete);
         }
         const deletedReview = await review.deleteOne({ _id: reviewId });
     } catch (err) {

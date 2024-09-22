@@ -4,15 +4,12 @@ import User from "../models/user.model.js";
 export async function signupUser(body) {
     try {
         const { username, email, password } = body;
-
         const existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
-            throw new Error(responseMessage.userAlreadyExists);
+            throw new CustomError(400, responseMessage.userAlreadyExists);
         }
-
         const user = await User.create(body);
         return user;
-
     } catch (error) {
         throw error;
     }
@@ -21,23 +18,18 @@ export async function signupUser(body) {
 export async function signinUser(body) {
     try {
         const { username, email, password } = body;
-
         const user = await User.findOne({
             $or: [{ username }, { email }]
         });
-
         if (!user) {
-            throw new Error(responseMessage.userNotRegistered);
+            throw new CustomError(400, responseMessage.userNotRegistered);
         }
-
         const isValidPassword = await user.isPasswordCorrect(password);
         if (!isValidPassword) {
-            throw new Error(responseMessage.invalidCredentials);
+            throw new CustomError(400, responseMessage.invalidCredentials);
         }
-
         const accessToken = user.generateAccessToken();
         return accessToken;
-
     } catch (error) {
         throw error;
     }

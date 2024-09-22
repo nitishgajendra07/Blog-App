@@ -54,7 +54,7 @@ export async function updateBlogController(req, res, next) {
     try {
         const blogId = req.params.identifier;
         if (!blogId) {
-            throw new Error({statusCode:400, message:responseMessage.missingRequiredFields})
+            return next({ statusCode: 404, message: responseMessage.missingRequiredFields });
         }
         const updatedBlog = await updateBlogInDatabase(blogId, req.body);
 
@@ -67,6 +67,9 @@ export async function updateBlogController(req, res, next) {
         if (err.name === responseMessage.validationError) {
             console.log(err);
             return next({ statusCode: 400, message: err.errors });
+        }
+        else if (err.name === responseMessage.unauthorizedBlogUpdate) {
+            return next({ statusCode: 400, message: err.name });
         }
         else if (err.message.includes(DUPLICATE_KEY_ERR)) {
             console.log(err.message);
@@ -82,18 +85,13 @@ export async function updateBlogController(req, res, next) {
 export async function deleteBlogController(req, res, next) {
     try {
         const blogId = req.params.identifier;
-
         if (!blogId) {
-            throw new Error({statusCode:400, message:responseMessage.missingRequiredFields})
+            return next({ statusCode: 404, message: responseMessage.blogNotFound });
         }
-
-
         const deletedBlog = await deleteBlogFromDatabase(blogId, req.body);
-
         if (!deletedBlog) {
             return next({ statusCode: 404, message: responseMessage.blogNotFound });
         }
-
         res.status(200).json({ success: true, message: "Blog deleted successfully", blog: deletedBlog });
     } catch (err) {
         console.log(err);

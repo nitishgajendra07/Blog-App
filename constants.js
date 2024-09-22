@@ -22,7 +22,11 @@ const responseMessage = {
     reviewDeletionSuccess: "Review deleted successfully",
     invalidReviewId: "Invalid reviewId",
     missingBlogId: "Missing blogId",
-    logoutSuccess: "Logged out successfully"
+    logoutSuccess: "Logged out successfully",
+    unauthorizedBlogUpdate: 'Unauthorized: You do not have permission to update this blog',
+    unauthorizedBlogDelete: 'Unauthorized: You do not have permission to delete this blog',
+    unauthorizedReviewDelete: 'Unauthorized: You do not have permission to delete this Review',
+    blogNotFound: 'Blog not found'
 };
 
 const customErrorMessage = {
