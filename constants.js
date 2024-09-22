@@ -21,7 +21,8 @@ const responseMessage = {
     invalidBlogTitle: "Invalid blogTitle",
     reviewDeletionSuccess: "Review deleted successfully",
     invalidReviewId: "Invalid reviewId",
-    missingBlogId: "Missing blogId"
+    missingBlogId: "Missing blogId",
+    logoutSuccess: "Logged out successfully"
 };
 
 const customErrorMessage = {

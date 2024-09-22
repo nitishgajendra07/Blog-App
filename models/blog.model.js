@@ -32,10 +32,11 @@ const blogSchema = new mongoose.Schema(
         rating: {
             type: Number,
             min: 1,
-            max: 5
+            max: 5,
         },
         numberOfReviews: {
-            type: Number
+            type: Number,
+            default:0
         }
     },
     { timestamps: true }

@@ -33,3 +33,10 @@ export async function signinController(req, res, next) {
 
     }
 }
+
+export async function logoutUserController(req, res) {
+    res.status(200)
+        .clearCookie(tokens.accessToken, { httpOnly: true })
+        .json({ message: responseMessage.logoutSuccess });
+}
+

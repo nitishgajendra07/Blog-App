@@ -26,7 +26,6 @@ export async function userAuthenticate(req, res, next) {
 
         req.body.userIdFromAuth = decodedToken._id;
         req.body.user = user;
-        console.log("1");
         
         next();
         console.log("2");

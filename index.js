@@ -1,11 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { serverListeningMessage } from './constants.js';
+import { responseMessage, serverListeningMessage } from './constants.js';
 import { connectToDB } from './db/connectToDB.js';
 import userRouter from './routes/user.router.js';
 import { errorHandler } from './middlewares/errorHandling.middleware.js';
 import { blogRouter } from './routes/blog.router.js';
 import cookieParser from 'cookie-parser';
+import { reviewRouter } from './routes/review.router.js';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(cookieParser());
 
 app.use('/user', userRouter);
 app.use('/blog', blogRouter);
+app.use('/review', reviewRouter);
 
 app.all("*", (req, res) => {
     res.status(404).json({ error: responseMessage.pageNotFound });
