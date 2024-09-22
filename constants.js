@@ -8,7 +8,7 @@ const responseMessage = {
     updationSuccess: "Profile updated successfully",
     userNotFound: "User not found",
     deletionSuccess: "Profile deleted successfully",
-    missingRequiredFields: "Missing required fields. (Required fields are name, age, qualification, email, password)",
+    missingRequiredFields: "Missing required fields.",
     invalidAge: "Invalid age",
     invalidEmail: "Invalid email",
     invalidToken: "Invalid Token",
@@ -20,7 +20,8 @@ const responseMessage = {
     invalidBlogId: "Invalid blogId",
     invalidBlogTitle: "Invalid blogTitle",
     reviewDeletionSuccess: "Review deleted successfully",
-    invalidReviewId: "Invalid reviewId"
+    invalidReviewId: "Invalid reviewId",
+    missingBlogId: "Missing blogId"
 };
 
 const customErrorMessage = {
@@ -30,14 +31,19 @@ const customErrorMessage = {
     mongoDBFail: "mongodb connection failed!!"
 };
 
+const tokens = {
+    accessToken: 'accessToken'
+};
+
 const allowedBlogCategories = ['Node.js', 'MongoDB', 'Express'];
 
 const serverListeningMessage = "Server is listening at port :";
 
-export { 
-    DUPLICATE_KEY_ERR, 
-    responseMessage, 
-    customErrorMessage, 
-    serverListeningMessage, 
-    allowedBlogCategories 
+export {
+    DUPLICATE_KEY_ERR,
+    responseMessage,
+    customErrorMessage,
+    serverListeningMessage,
+    allowedBlogCategories,
+    tokens
 };
